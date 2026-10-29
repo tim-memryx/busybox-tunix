@@ -3631,6 +3631,10 @@ struct job {
 	struct procstat *ps;    /* status of processes when more than one */
 #if JOBS
 	int stopstatus;         /* status of a stopped job */
+# if ENABLE_TUNIX_NATIVE
+	struct termios saved_tty;
+	int saved_tty_valid;
+# endif
 #endif
 	unsigned nprocs;        /* number of processes */
 
@@ -3827,7 +3831,34 @@ static unsigned njobs; //4
 /* current job */
 static struct job *curjob; //lots
 
-#if 0
+#if ENABLE_TUNIX_NATIVE && JOBS
+/* Keep the shell usable after a stopped/signaled foreground job, while fg
+ * restores that job's own modes before allowing it to run again. Merely
+ * restoring the shell modes loses a raw-mode application's terminal state. */
+static struct termios shell_tty_info;
+static int shell_tty_valid;
+
+static void
+get_tty_state(void)
+{
+	shell_tty_valid = rootshell && ttyfd >= 0
+		&& tcgetattr(ttyfd, &shell_tty_info) == 0;
+}
+
+static void
+restore_tty_if_stopped_or_signaled(struct job *jp)
+{
+	unsigned i;
+	int restore = jp->state == JOBSTOPPED;
+	if (restore)
+		jp->saved_tty_valid = tcgetattr(ttyfd, &jp->saved_tty) == 0;
+	for (i = 0; i < jp->nprocs; ++i)
+		if (jp->ps[i].ps_status != -1 && WIFSIGNALED(jp->ps[i].ps_status))
+			restore = 1;
+	if (restore && shell_tty_valid)
+		tcsetattr(ttyfd, TCSADRAIN, &shell_tty_info);
+}
+#elif 0
 /* Bash has a feature: it restores termios after a successful wait for
  * a foreground job which had at least one stopped or sigkilled member.
  * The probable rationale is that SIGSTOP and SIGKILL can preclude task from
@@ -4228,6 +4259,10 @@ restartjob(struct job *jp, int mode)
 	if (mode == FORK_FG) {
 		get_tty_state();
 		xtcsetpgrp(ttyfd, pgid);
+# if ENABLE_TUNIX_NATIVE
+		if (jp->saved_tty_valid)
+			tcsetattr(ttyfd, TCSADRAIN, &jp->saved_tty);
+# endif
 	}
 	killpg(pgid, SIGCONT);
 	ps = jp->ps;
