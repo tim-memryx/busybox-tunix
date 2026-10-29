@@ -5,6 +5,13 @@
 
 comment "Library Tuning"
 
+config FEATURE_INET
+	bool "Internet protocol helpers"
+	default y
+	help
+	  Disable for native ports without Internet sockets or a resolver.
+	  Networking applets and other consumers must remain disabled.
+
 INSERT
 
 choice

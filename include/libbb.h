@@ -17,7 +17,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <inttypes.h>
-#include <netdb.h>
+#if ENABLE_FEATURE_INET
+# include <netdb.h>
+#endif
 #include <setjmp.h>
 #include <signal.h>
 #include <paths.h>
@@ -138,6 +140,7 @@
 #ifndef _PATH_GSHADOW
 #define _PATH_GSHADOW "/etc/gshadow"
 #endif
+#if ENABLE_FEATURE_INET
 #if defined __FreeBSD__ || defined __OpenBSD__
 # include <netinet/in.h>
 # include <arpa/inet.h>
@@ -158,6 +161,7 @@
 //  ifdef SPECIFIC_BROKEN_LIBC_CHECK / typedef socklen_t / endif
 //in platform.h instead!
 #endif
+#endif /* ENABLE_FEATURE_INET */
 #ifndef HAVE_CLEARENV
 # define clearenv() do { if (environ) environ[0] = NULL; } while (0)
 #endif
@@ -680,6 +684,7 @@ struct fd_pair { int rd; int wr; };
 #define piped_pair(pair)  pipe(&((pair).rd))
 #define xpiped_pair(pair) xpipe(&((pair).rd))
 
+#if ENABLE_FEATURE_INET
 /* Useful for having small structure members/global variables */
 typedef int8_t socktype_t;
 typedef int8_t family_t;
@@ -708,6 +713,8 @@ struct BUG_too_small {
 };
 
 
+#endif /* ENABLE_FEATURE_INET */
+
 int parse_datestr(const char *date_str, struct tm *ptm) FAST_FUNC;
 time_t validate_tm_time(const char *date_str, struct tm *ptm) FAST_FUNC;
 char *strftime_HHMMSS(char *buf, unsigned len, time_t *tp) FAST_FUNC;
@@ -716,6 +723,7 @@ void xgettimeofday(struct timeval *tv) FAST_FUNC;
 void xsettimeofday(const struct timeval *tv) FAST_FUNC;
 
 
+#if ENABLE_FEATURE_INET
 int xsocket(int domain, int type, int protocol) FAST_FUNC;
 void xbind(int sockfd, struct sockaddr *my_addr, socklen_t addrlen) FAST_FUNC;
 void xlisten(int s, int backlog) FAST_FUNC;
@@ -832,6 +840,8 @@ struct hostent *xgethostbyname(const char *name) FAST_FUNC;
 // Also mount.c and inetd.c are using gethostbyname(),
 // + inet_common.c has additional IPv4-only stuff
 
+
+#endif /* ENABLE_FEATURE_INET */
 
 struct tls_aes {
 	uint32_t key[60];
