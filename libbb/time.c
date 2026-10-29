@@ -10,6 +10,7 @@
 
 /* Returns 0 if the time structure contains an absolute UTC time which
  * should not be subject to DST adjustment by the caller. */
+#if !ENABLE_TUNIX_NATIVE
 int FAST_FUNC parse_datestr(const char *date_str, struct tm *ptm)
 {
 	char end = '\0';
@@ -264,6 +265,8 @@ int FAST_FUNC parse_datestr(const char *date_str, struct tm *ptm)
 	}
 	return 1;
 }
+
+#endif
 
 time_t FAST_FUNC validate_tm_time(const char *date_str, struct tm *ptm)
 {

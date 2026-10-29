@@ -573,8 +573,11 @@ static NOINLINE unsigned display_single(const struct dnode *dn)
 			/* G.current_time_t is ~== time(NULL) */
 			char *filetime = ctime(&dn->dn_time);
 			/* filetime's format: "Wed Jun 30 21:49:08 1993\n" */
-			time_t age = G.current_time_t - dn->dn_time;
-			if (age < 3600L * 24 * 365 / 2 && age > -15 * 60) {
+			double age = difftime(G.current_time_t, dn->dn_time);
+			if (!filetime) {
+				/* Unsupported timezone or unrepresentable timestamp. */
+				printf("???????????? ");
+			} else if (age < 3600L * 24 * 365 / 2 && age > -15 * 60) {
 				/* less than 6 months old */
 				/* "mmm dd hh:mm " */
 				printf("%.12s ", filetime + 4);

@@ -410,7 +410,13 @@ int FAST_FUNC copy_file(const char *source, const char *dest, int flags)
 	if (S_ISBLK(source_stat.st_mode) || S_ISCHR(source_stat.st_mode)
 	 || S_ISSOCK(source_stat.st_mode) || S_ISFIFO(source_stat.st_mode)
 	) {
+#if defined(__tunix__)
+		/* Device creation belongs to kernel policy, not ordinary file copying. */
+		errno = ENOTSUP;
+		{
+#else
 		if (mknod(dest, source_stat.st_mode, source_stat.st_rdev) < 0) {
+#endif
 			bb_perror_msg("can't create '%s'", dest);
 			return -1;
 		}

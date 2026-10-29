@@ -76,7 +76,9 @@
 //usage:       "1\n"
 
 #include "libbb.h"
-#include <regex.h>
+#if ENABLE_TEST2 || ENABLE_ASH_BASH_COMPAT || ENABLE_HUSH_BASH_COMPAT
+# include <regex.h>
+#endif
 #include <fnmatch.h>
 
 /* This is a NOFORK applet. Be very careful! */

@@ -232,7 +232,7 @@ ssize_t FAST_FUNC full_write2_str(const char *str)
 	return full_write(STDERR_FILENO, str, strlen(str));
 }
 
-#if !ENABLE_TUNIX_BOOTSTRAP
+#if !ENABLE_TUNIX_NATIVE
 static int wh_helper(int value, int def_val, const char *env_name, int *err)
 {
 	/* Envvars override even if "value" from ioctl is valid (>0).

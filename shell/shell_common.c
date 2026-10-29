@@ -320,6 +320,14 @@ shell_builtin_read(struct builtin_read_params *params)
 
 /* ulimit builtin */
 
+#if defined(__tunix__)
+int FAST_FUNC shell_builtin_ulimit(char **argv UNUSED_PARAM)
+{
+	/* Generic shell ulimit assumes resource classes Tunix does not expose. */
+	bb_simple_error_msg("ulimit is unavailable; use the native resource API");
+	return 1;
+}
+#else
 struct limits {
 	uint8_t cmd;            /* RLIMIT_xxx fit into it */
 	uint8_t factor_shift;   /* shift by to get rlim_{cur,max} values */
@@ -688,3 +696,5 @@ shell_builtin_ulimit(char **argv)
 
 	return EXIT_SUCCESS;
 }
+
+#endif

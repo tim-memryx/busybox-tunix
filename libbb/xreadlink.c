@@ -105,6 +105,7 @@ char* FAST_FUNC xmalloc_readlink_or_warn(const char *path)
 	return buf;
 }
 
+#if !ENABLE_TUNIX_NATIVE
 char* FAST_FUNC xmalloc_realpath(const char *path)
 {
 /* NB: uclibc also defines __GLIBC__
@@ -196,3 +197,5 @@ char* FAST_FUNC xmalloc_realpath_coreutils(char *path)
 
 	return buf;
 }
+
+#endif

@@ -186,8 +186,10 @@
 #define JOBS ENABLE_ASH_JOB_CONTROL
 
 #include <fnmatch.h>
-#include <sys/times.h>
-#include <sys/utsname.h> /* for setting $HOSTNAME */
+#if !defined(__tunix__)
+# include <sys/times.h>
+# include <sys/utsname.h> /* for setting $HOSTNAME */
+#endif
 #include "busybox.h" /* for applet_names */
 #if ENABLE_FEATURE_SH_EMBEDDED_SCRIPTS
 # include "embedded_scripts.h"
@@ -14170,6 +14172,14 @@ unsetcmd(int argc UNUSED_PARAM, char **argv UNUSED_PARAM)
 	return 0;
 }
 
+#if ENABLE_TUNIX_NATIVE
+static int FAST_FUNC
+timescmd(int argc UNUSED_PARAM, char **argv UNUSED_PARAM)
+{
+	bb_simple_error_msg("process CPU accounting is unavailable");
+	return 1;
+}
+#else
 static const unsigned char timescmd_str[] ALIGN1 = {
 	' ',  offsetof(struct tms, tms_utime),
 	'\n', offsetof(struct tms, tms_stime),
@@ -14203,6 +14213,8 @@ timescmd(int argc UNUSED_PARAM, char **argv UNUSED_PARAM)
 
 	return 0;
 }
+#endif
+
 
 #if ENABLE_FEATURE_SH_MATH
 /*

@@ -281,7 +281,6 @@ off_t FAST_FUNC xlseek(int fd, off_t offset, int whence)
 	return off;
 }
 
-#if !ENABLE_TUNIX_BOOTSTRAP
 int FAST_FUNC xmkstemp(char *template)
 {
 	int fd = mkstemp(template);
@@ -290,7 +289,7 @@ int FAST_FUNC xmkstemp(char *template)
 	return fd;
 }
 
-#endif /* !ENABLE_TUNIX_BOOTSTRAP */
+
 
 // Die with supplied filename if this FILE* has ferror set.
 void FAST_FUNC die_if_ferror(FILE *fp, const char *fn)
@@ -438,7 +437,7 @@ void FAST_FUNC xfchdir(int fd)
 		bb_simple_perror_msg_and_die("fchdir");
 }
 
-#if !ENABLE_TUNIX_BOOTSTRAP
+#if !ENABLE_TUNIX_NATIVE
 void FAST_FUNC xchroot(const char *path)
 {
 	if (chroot(path))
@@ -446,7 +445,7 @@ void FAST_FUNC xchroot(const char *path)
 	xchdir("/");
 }
 
-#endif /* !ENABLE_TUNIX_BOOTSTRAP */
+#endif /* !ENABLE_TUNIX_NATIVE */
 
 // Print a warning message if opendir() fails, but don't die.
 DIR* FAST_FUNC warn_opendir(const char *path)
@@ -634,7 +633,7 @@ char* FAST_FUNC xmalloc_ttyname(int fd)
 	return xstrdup(buf);
 }
 
-#if !ENABLE_TUNIX_BOOTSTRAP
+#if !ENABLE_TUNIX_NATIVE
 void FAST_FUNC generate_uuid(uint8_t *buf)
 {
 	/* http://www.ietf.org/rfc/rfc4122.txt
@@ -695,7 +694,7 @@ void FAST_FUNC generate_uuid(uint8_t *buf)
 	buf[4 + 2 + 2] = (buf[4 + 2 + 2] & 0x3f) | 0x80;
 }
 
-#endif /* !ENABLE_TUNIX_BOOTSTRAP */
+#endif /* !ENABLE_TUNIX_NATIVE */
 
 #if BB_MMU
 pid_t FAST_FUNC xfork(void)
@@ -708,7 +707,7 @@ pid_t FAST_FUNC xfork(void)
 }
 #endif
 
-#if !ENABLE_TUNIX_BOOTSTRAP
+#if !ENABLE_TUNIX_NATIVE
 void FAST_FUNC xvfork_parent_waits_and_exits(void)
 {
 	pid_t pid;
@@ -725,7 +724,7 @@ void FAST_FUNC xvfork_parent_waits_and_exits(void)
 	/* Child continues */
 }
 
-#endif /* !ENABLE_TUNIX_BOOTSTRAP */
+#endif /* !ENABLE_TUNIX_NATIVE */
 
 // Useful when we do know that pid is valid, and we just want to wait
 // for it to exit. Not existing pid is fatal. waitpid() status is not returned.
@@ -739,7 +738,7 @@ int FAST_FUNC wait_for_exitstatus(pid_t pid)
 	return exit_status;
 }
 
-#if !ENABLE_TUNIX_BOOTSTRAP
+#if !ENABLE_TUNIX_NATIVE
 void FAST_FUNC xsettimeofday(const struct timeval *tv)
 {
 	if (settimeofday(tv, NULL))
@@ -756,4 +755,4 @@ void FAST_FUNC xgettimeofday(struct timeval *tv)
 	gettimeofday(tv, NULL);
 #endif
 }
-#endif /* !ENABLE_TUNIX_BOOTSTRAP */
+#endif /* !ENABLE_TUNIX_NATIVE */

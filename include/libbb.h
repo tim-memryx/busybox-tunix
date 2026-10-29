@@ -35,6 +35,7 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <string.h>
+#include <strings.h>
 /* There are two incompatible basename's, let's not use them! */
 /* See the dirname/basename man page for details */
 #include <libgen.h> /* dirname,basename */

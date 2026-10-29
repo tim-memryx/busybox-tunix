@@ -434,14 +434,11 @@ typedef unsigned smalluint;
 
 /* Tunix exposes its own libc ABI; never infer Linux/glibc extensions. */
 #if defined(__tunix__)
-# undef HAVE_DPRINTF
 # undef HAVE_MKDTEMP
 # undef HAVE_PTSNAME_R
 # undef HAVE_SETBIT
 # undef HAVE_SIGHANDLER_T
 # undef HAVE_MEMPCPY
-# undef HAVE_STRCASESTR
-# undef HAVE_STRSEP
 # undef HAVE_STRSIGNAL
 # undef HAVE_STRVERSCMP
 # undef HAVE_UNLOCKED_STDIO
@@ -467,16 +464,13 @@ typedef unsigned smalluint;
 #endif
 
 #if defined(__WATCOMC__)
-# undef HAVE_DPRINTF
 # undef HAVE_GETLINE
 # undef HAVE_MEMRCHR
 # undef HAVE_MKDTEMP
 # undef HAVE_SETBIT
 # undef HAVE_STPCPY
 # undef HAVE_STPNCPY
-# undef HAVE_STRCASESTR
 # undef HAVE_STRCHRNUL
-# undef HAVE_STRSEP
 # undef HAVE_STRSIGNAL
 # undef HAVE_STRVERSCMP
 # undef HAVE_UNLOCKED_STDIO
@@ -506,7 +500,6 @@ typedef unsigned smalluint;
 # undef HAVE_SIGHANDLER_T
 # undef HAVE_STRVERSCMP
 # undef HAVE_XTABS
-# undef HAVE_DPRINTF
 # undef HAVE_UNLOCKED_STDIO
 # undef HAVE_UNLOCKED_LINE_OPS
 # undef HAVE_PRINTF_PERCENTM

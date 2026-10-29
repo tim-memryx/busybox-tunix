@@ -146,7 +146,7 @@ export SYSROOT=$(CONFIG_SYSROOT)
 endif
 
 # libm may be needed for dc, awk, ntpd
-ifneq ($(CONFIG_TUNIX_BOOTSTRAP),y)
+ifneq ($(CONFIG_TUNIX_NATIVE),y)
 LDLIBS += m
 endif
 # Android has no separate crypt library

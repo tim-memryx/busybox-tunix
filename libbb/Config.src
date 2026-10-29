@@ -12,13 +12,13 @@ config FEATURE_INET
 	  Disable for native ports without Internet sockets or a resolver.
 	  Networking applets and other consumers must remain disabled.
 
-config TUNIX_BOOTSTRAP
-	bool "Tunix bootstrap library (cat/echo/true/false only)"
+config TUNIX_NATIVE
+	bool "Tunix native library"
 	default n
 	depends on !FEATURE_INET
 	help
-	  Build only the support library needed to qualify a new native libc.
-	  This is not a general BusyBox configuration. Expand the native port
+	  Build the reviewed support-library subset for the native Tunix port.
+	  This is not a general Linux configuration. Expand the native port
 	  before enabling additional applets.
 
 INSERT

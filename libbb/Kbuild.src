@@ -207,13 +207,25 @@ lib-$(CONFIG_FEATURE_CUT_REGEX) += xregcomp.o
 # Add the experimental logging functionality, only used by zcip
 lib-$(CONFIG_ZCIP) += logenv.o
 
-# Keep the bootstrap boundary explicit. Missing dependencies remain link errors,
+# Keep the native boundary explicit. Missing dependencies remain link errors,
 # rather than being satisfied by nonfunctional platform stubs.
-ifeq ($(CONFIG_TUNIX_BOOTSTRAP),y)
+ifeq ($(CONFIG_TUNIX_NATIVE),y)
 lib-y := appletlib.o last_char_is.o wfopen.o wfopen_input.o bb_cat.o xfuncs.o safe_strncpy.o default_error_retval.o messages.o ptr_to_globals.o \
     getopt32.o get_last_path_component.o compare_string_array.o \
     full_write.o safe_write.o read.o copyfd.o \
     fflush_stdout_and_exit.o process_escape_sequence.o \
     perror_msg.o perror_nomsg.o perror_nomsg_and_die.o verror_msg.o \
     xfunc_die.o xfuncs_printf.o xatonum.o bb_strtonum.o llist.o
+lib-y += executable.o ask_confirmation.o bb_getgroups.o make_directory.o mode_string.o \
+    parse_mode.o concat_path_file.o copy_file.o endofname.o fclose_nonstdin.o \
+    u_signal_names.o isdirectory.o time.o read_printf.o printable_string.o \
+    recursive_action.o remove_file.o signals.o skip_whitespace.o xreadlink.o xgetcwd.o \
+    common_bufsiz.o
+
+lib-y += inode_hash.o concat_subpath_file.o auto_string.o safe_poll.o bb_pwd.o
+
+lib-y += xregcomp.o
+
+lib-y += get_line_from_file.o
+
 endif
