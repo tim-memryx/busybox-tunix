@@ -33,7 +33,7 @@ static inline int *get_perrno(void) { return &errno; }
 #include "busybox.h"
 
 #if !(defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) \
-    || defined(__APPLE__) \
+    || defined(__APPLE__) || defined(__tunix__) \
     )
 # include <malloc.h> /* for mallopt */
 #endif

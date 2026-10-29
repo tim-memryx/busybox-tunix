@@ -232,6 +232,7 @@ ssize_t FAST_FUNC full_write2_str(const char *str)
 	return full_write(STDERR_FILENO, str, strlen(str));
 }
 
+#if !ENABLE_TUNIX_BOOTSTRAP
 static int wh_helper(int value, int def_val, const char *env_name, int *err)
 {
 	/* Envvars override even if "value" from ioctl is valid (>0).
@@ -389,6 +390,8 @@ int FAST_FUNC set_termios_to_raw(int fd, struct termios *oldterm, int flags)
 	get_termios_and_make_raw(fd, &newterm, oldterm, flags);
 	return tcsetattr(fd, TCSANOW, &newterm);
 }
+
+#endif
 
 pid_t FAST_FUNC safe_waitpid(pid_t pid, int *wstat, int options)
 {

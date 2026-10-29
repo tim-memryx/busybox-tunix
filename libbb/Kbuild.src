@@ -206,3 +206,14 @@ lib-$(CONFIG_FEATURE_CUT_REGEX) += xregcomp.o
 
 # Add the experimental logging functionality, only used by zcip
 lib-$(CONFIG_ZCIP) += logenv.o
+
+# Keep the bootstrap boundary explicit. Missing dependencies remain link errors,
+# rather than being satisfied by nonfunctional platform stubs.
+ifeq ($(CONFIG_TUNIX_BOOTSTRAP),y)
+lib-y := appletlib.o last_char_is.o wfopen.o wfopen_input.o bb_cat.o xfuncs.o safe_strncpy.o default_error_retval.o messages.o ptr_to_globals.o \
+    getopt32.o get_last_path_component.o compare_string_array.o \
+    full_write.o safe_write.o read.o copyfd.o \
+    fflush_stdout_and_exit.o process_escape_sequence.o \
+    perror_msg.o perror_nomsg.o perror_nomsg_and_die.o verror_msg.o \
+    xfunc_die.o xfuncs_printf.o xatonum.o bb_strtonum.o llist.o
+endif

@@ -561,6 +561,11 @@ export MODLIB
 
 
 ifeq ($(KBUILD_EXTMOD),)
+# The initial native port intentionally excludes unrelated Linux libraries.
+ifeq ($(CONFIG_TUNIX_BOOTSTRAP),y)
+libs-y := coreutils/ libbb/
+endif
+
 busybox-dirs	:= $(patsubst %/,%,$(filter %/, $(core-y) $(core-m) $(libs-y) $(libs-m)))
 
 busybox-alldirs	:= $(sort $(busybox-dirs) $(patsubst %/,%,$(filter %/, \

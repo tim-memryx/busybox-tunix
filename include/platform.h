@@ -432,6 +432,29 @@ typedef unsigned smalluint;
 #define HAVE_DEV_FD 1
 #define DEV_FD_PREFIX "/dev/fd/"
 
+/* Tunix exposes its own libc ABI; never infer Linux/glibc extensions. */
+#if defined(__tunix__)
+# undef HAVE_DPRINTF
+# undef HAVE_MKDTEMP
+# undef HAVE_PTSNAME_R
+# undef HAVE_SETBIT
+# undef HAVE_SIGHANDLER_T
+# undef HAVE_MEMPCPY
+# undef HAVE_STRCASESTR
+# undef HAVE_STRSEP
+# undef HAVE_STRSIGNAL
+# undef HAVE_STRVERSCMP
+# undef HAVE_UNLOCKED_STDIO
+# undef HAVE_UNLOCKED_LINE_OPS
+# undef HAVE_XTABS
+# undef HAVE_MNTENT_H
+# undef HAVE_NET_ETHERNET_H
+# undef HAVE_SYS_STATFS_H
+# undef HAVE_PRINTF_PERCENTM
+# undef HAVE_WAIT3
+# undef HAVE_DEV_FD
+#endif
+
 #if defined(__UCLIBC__)
 # if UCLIBC_VERSION < KERNEL_VERSION(0, 9, 32)
 #  undef HAVE_STRVERSCMP
@@ -456,7 +479,6 @@ typedef unsigned smalluint;
 # undef HAVE_STRSEP
 # undef HAVE_STRSIGNAL
 # undef HAVE_STRVERSCMP
-# undef HAVE_VASPRINTF
 # undef HAVE_UNLOCKED_STDIO
 # undef HAVE_UNLOCKED_LINE_OPS
 # undef HAVE_NET_ETHERNET_H
@@ -594,6 +616,7 @@ extern char *stpncpy(char *p, const char *to_add, size_t n) FAST_FUNC;
 
 #ifndef HAVE_MEMPCPY
 #include <string.h>
+#include <stdarg.h>
 /* In case we are wrong about !HAVE_MEMPCPY, and toolchain _does_ have
  * mempcpy(), avoid colliding with it:
  */

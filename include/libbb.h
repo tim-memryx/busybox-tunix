@@ -614,9 +614,15 @@ enum {
 		+ (1LL << SIGQUIT)   // Quit from keyboard
 		+ (1LL << SIGABRT)   // Abort signal from abort(3)
 		+ (1LL << SIGALRM)   // Timer signal from alarm(2)
+#ifdef SIGVTALRM
 		+ (1LL << SIGVTALRM) // Virtual alarm clock
+#endif
+#ifdef SIGXCPU
 		+ (1LL << SIGXCPU)   // CPU time limit exceeded
+#endif
+#ifdef SIGXFSZ
 		+ (1LL << SIGXFSZ)   // File size limit exceeded
+#endif
 		+ (1LL << SIGUSR1)   // Yes kids, these are also fatal!
 		+ (1LL << SIGUSR2)
 		+ 0),
